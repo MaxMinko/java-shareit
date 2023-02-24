@@ -1,0 +1,103 @@
+package ru.practicum.shareit.item;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.UserController;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Component
+public class InMemoryItemStorage implements ItemStorage {
+    Map<Integer, List<Item>> items = new HashMap<>();
+    private int itemId = 1;
+    private final UserController userController;
+
+    @Autowired
+    InMemoryItemStorage(UserController userController) {
+        this.userController = userController;
+    }
+
+    @Override
+    public ItemDto addItem(ItemDto itemDto, int userId) {
+        userController.getUser(userId);
+        Item item;
+        if (itemDto.getId() == 0) {
+            itemDto.setId(itemId++);
+        }
+        if (items.containsKey(userId)) {
+            item = ItemMapper.toItem(itemDto);
+            items.get(userId).add(item);
+        } else {
+            item = ItemMapper.toItem(itemDto);
+            List<Item> itemList = new ArrayList<>();
+            itemList.add(item);
+            items.put(userId, itemList);
+        }
+        return itemDto;
+    }
+
+    @Override
+    public ItemDto updateItem(ItemDto itemDto, int userId, int itemId) {
+        Boolean userItem = false;
+        List<Item> itemList = items.get(userController.getUser(userId).getId());
+        if (itemList != null) {
+            for (Item itemForUpdate : itemList) {
+                if (itemForUpdate.getId() == itemId) {
+                    deleteItem(userId, ItemMapper.toItemDto(itemForUpdate));
+                    if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
+                        itemForUpdate.setName(itemDto.getName());
+                    }
+                    if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
+                        itemForUpdate.setDescription(itemDto.getDescription());
+                    }
+                    if (itemDto.getAvailable() != null) {
+                        itemForUpdate.setAvailable(itemDto.getAvailable());
+                    }
+                    addItem(ItemMapper.toItemDto(itemForUpdate), userId);
+                    userItem = true;
+                    break;
+                }
+            }
+            if (userItem == false) {
+                throw new ItemNotFoundException("Нет вещей.");
+            }
+        } else {
+            throw new ItemNotFoundException("Пользователь не может редактировать чужую вещь.");
+        }
+        return getItem(itemId).get();
+    }
+
+    @Override
+    public Optional<ItemDto> getItem(int itemId) {
+        Optional<ItemDto> itemDto = items.entrySet().stream()
+                .flatMap(s -> s.getValue().stream())
+                .filter(x -> x.getId() == itemId).findFirst()
+                .map(ItemMapper::toItemDto);
+        return itemDto;
+    }
+
+    @Override
+    public List<ItemDto> getAllUserItems(int userId) {
+        return items.entrySet().stream().filter(s -> s.getKey() == userId).
+                flatMap(x -> x.getValue().stream())
+                .map(ItemMapper::toItemDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemDto> getItemByDescription(String text) {
+        return items.entrySet().stream().flatMap(x -> x.getValue().stream())
+                .filter(x -> x.getAvailable() == true &&
+                        (x.getName().toLowerCase().contains(text.toLowerCase()) ||
+                                x.getDescription().toLowerCase()
+                                        .contains(text.toLowerCase()))).map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
+    }
+
+    private void deleteItem(int userId, ItemDto itemDto) {
+        items.get(userId).remove(ItemMapper.toItem(itemDto));
+    }
+}
