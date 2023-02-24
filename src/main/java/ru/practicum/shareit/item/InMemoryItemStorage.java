@@ -22,22 +22,19 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public ItemDto addItem(ItemDto itemDto, int userId) {
+    public ItemDto addItem(Item item, int userId) {
         userController.getUser(userId);
-        Item item;
-        if (itemDto.getId() == 0) {
-            itemDto.setId(itemId++);
+        if (item.getId() == 0) {
+            item.setId(itemId++);
         }
         if (items.containsKey(userId)) {
-            item = ItemMapper.toItem(itemDto);
             items.get(userId).add(item);
         } else {
-            item = ItemMapper.toItem(itemDto);
             List<Item> itemList = new ArrayList<>();
             itemList.add(item);
             items.put(userId, itemList);
         }
-        return itemDto;
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
@@ -57,7 +54,7 @@ public class InMemoryItemStorage implements ItemStorage {
                     if (itemDto.getAvailable() != null) {
                         itemForUpdate.setAvailable(itemDto.getAvailable());
                     }
-                    addItem(ItemMapper.toItemDto(itemForUpdate), userId);
+                    addItem(itemForUpdate, userId);
                     userItem = true;
                     break;
                 }

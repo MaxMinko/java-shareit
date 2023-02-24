@@ -1,12 +1,12 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Item {
     int id;
     String name;
@@ -16,5 +16,9 @@ public class Item {
     String request;
 
     public Item(int id, String name, String description, Boolean available) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
     }
 }

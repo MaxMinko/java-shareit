@@ -22,7 +22,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addItem(ItemDto itemDto, int userId) {
         validator.checkItemDto(itemDto);
-        return itemStorage.addItem(itemDto, userId);
+        return itemStorage.addItem(ItemMapper.toItem(itemDto), userId);
     }
 
     @Override
