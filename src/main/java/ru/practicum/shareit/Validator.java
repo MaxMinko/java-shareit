@@ -41,11 +41,12 @@ public class Validator {
         }
     }
 
-    public void checkUserDtoEmail(String email) {
+    public void checkUserDtoEmail(String email,int id) {
         if (email.isBlank()) {
             throw new ValidationException("Емейл не может быть пустым");
         }
-        if (!userStorage.getAllUsers().stream().filter(x -> x.getEmail().equals(email)).findFirst().isEmpty()) {
+        if (!userStorage.getAllUsers().stream()
+                .filter(x -> x.getEmail().equals(email)&&x.getId()!=id).findFirst().isEmpty()) {
             throw new DuplicateEmailException("Такой емейл есть.");
         }
         if (!email.contains("@")) {
@@ -56,14 +57,14 @@ public class Validator {
     public void checkUserDtoForUpdate(UserDto userDto) {
         if (userDto.getEmail() == null || userDto.getName() == null) {
             if (userDto.getName() == null) {
-                checkUserDtoEmail(userDto.getEmail());
+                checkUserDtoEmail(userDto.getEmail(),userDto.getId());
             }
             if (userDto.getEmail() == null) {
                 checkUserDtoName(userDto.getName());
             }
         } else {
             checkUserDtoName(userDto.getName());
-            checkUserDtoEmail(userDto.getEmail());
+            checkUserDtoEmail(userDto.getEmail(),userDto.getId());
         }
     }
 
