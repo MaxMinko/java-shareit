@@ -1,23 +1,17 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.validator;
 
 import ru.practicum.shareit.exception.DuplicateEmailException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.ItemStorage;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.UserStorage;
 import ru.practicum.shareit.user.dto.UserDto;
 
-public class Validator {
-    UserStorage userStorage;
-    ItemStorage itemStorage;
+public class UserValidator {
+    private UserStorage userStorage;
 
-    public Validator(UserStorage userStorage) {
+    public UserValidator(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
-    public Validator(ItemStorage itemStorage) {
-        this.itemStorage = itemStorage;
-    }
 
     public void checkUserDtoForCreate(UserDto userDto) {
         if (userDto.getEmail() == null || userDto.getEmail().isBlank()) {
@@ -66,19 +60,6 @@ public class Validator {
             checkUserDtoName(userDto.getName());
             checkUserDtoEmail(userDto.getEmail(),userId);
         }
-    }
-
-    public void checkItemDto(ItemDto itemDto) {
-        if (itemDto.getName() == null || itemDto.getName().isBlank()) {
-            throw new ValidationException("Имя не может быть пустым.");
-        }
-        if (itemDto.getDescription() == null || itemDto.getDescription().isBlank()) {
-            throw new ValidationException("Описание не может быть пустым.");
-        }
-        if (itemDto.getAvailable() == null) {
-            throw new ValidationException("Статус не может быть пустым.");
-        }
-
     }
 
 }

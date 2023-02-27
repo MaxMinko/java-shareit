@@ -1,9 +1,10 @@
 package ru.practicum.shareit.item;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.user.UserController;
 
 
 import java.util.List;
@@ -11,17 +12,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/items")
+@RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
-
-    @Autowired
-    ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
+    private final UserController userController;
 
     @PostMapping()
     public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") int userId,
                            @RequestBody ItemDto itemDto) {
+        userController.getUser(userId);
         return itemService.addItem(itemDto, userId);
     }
 
@@ -29,6 +28,7 @@ public class ItemController {
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") int userId,
                               @PathVariable("itemId") int itemId,
                               @RequestBody ItemDto itemDto) {
+        userController.getUser(userId);
         return itemService.updateItem(itemDto, userId, itemId);
     }
 

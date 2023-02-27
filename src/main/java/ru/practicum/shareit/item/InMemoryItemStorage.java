@@ -1,29 +1,20 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserController;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class InMemoryItemStorage implements ItemStorage {
-    Map<Integer, List<Item>> items = new HashMap<>();
+    private Map<Integer, List<Item>> items = new HashMap<>();
     private int itemId = 1;
-    private final UserController userController;
-
-    @Autowired
-    InMemoryItemStorage(UserController userController) {
-        this.userController = userController;
-    }
 
     @Override
     public ItemDto addItem(Item item, int userId) {
-        userController.getUser(userId);
         if (item.getId() == 0) {
             item.setId(itemId++);
         }
@@ -40,7 +31,7 @@ public class InMemoryItemStorage implements ItemStorage {
     @Override
     public ItemDto updateItem(ItemDto itemDto, int userId, int itemId) {
         Boolean userItem = false;
-        List<Item> itemList = items.get(userController.getUser(userId).getId());
+        List<Item> itemList = items.get(userId);
         if (itemList != null) {
             for (Item itemForUpdate : itemList) {
                 if (itemForUpdate.getId() == itemId) {

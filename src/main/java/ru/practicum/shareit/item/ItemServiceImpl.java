@@ -3,7 +3,7 @@ package ru.practicum.shareit.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.Validator;
+import ru.practicum.shareit.validator.ItemValidator;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.*;
@@ -11,17 +11,16 @@ import java.util.*;
 @Service
 public class ItemServiceImpl implements ItemService {
     private final ItemStorage itemStorage;
-    private final Validator validator;
+    private final ItemValidator itemValidator=new ItemValidator();
 
     @Autowired
     ItemServiceImpl(ItemStorage itemStorage) {
         this.itemStorage = itemStorage;
-        this.validator = new Validator(this.itemStorage);
     }
 
     @Override
     public ItemDto addItem(ItemDto itemDto, int userId) {
-        validator.checkItemDto(itemDto);
+        itemValidator.checkItemDto(itemDto);
         return itemStorage.addItem(ItemMapper.toItem(itemDto), userId);
     }
 

@@ -3,7 +3,7 @@ package ru.practicum.shareit.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.UserNotFoundException;
-import ru.practicum.shareit.Validator;
+import ru.practicum.shareit.validator.UserValidator;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
@@ -13,23 +13,23 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
-    private final Validator validator;
+    private final UserValidator userValidator;
 
     @Autowired
     UserServiceImpl(UserStorage userStorage) {
         this.userStorage = userStorage;
-        this.validator = new Validator(this.userStorage);
+        this.userValidator = new UserValidator(this.userStorage);
     }
 
     @Override
     public UserDto addUser(UserDto userDto) {
-        validator.checkUserDtoForCreate(userDto);
+        userValidator.checkUserDtoForCreate(userDto);
         return UserMapper.toUserDto(userStorage.addUser(UserMapper.toUser(userDto)));
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, int userId) {
-        validator.checkUserDtoForUpdate(userDto,userId);
+        userValidator.checkUserDtoForUpdate(userDto, userId);
         return UserMapper.toUserDto(userStorage.updateUser(UserMapper.toUser(userDto), userId));
     }
 
