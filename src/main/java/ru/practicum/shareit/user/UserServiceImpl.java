@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, int userId) {
-        validator.checkUserDtoForUpdate(userDto);
+        validator.checkUserDtoForUpdate(userDto,userId);
         return UserMapper.toUserDto(userStorage.updateUser(UserMapper.toUser(userDto), userId));
     }
 
