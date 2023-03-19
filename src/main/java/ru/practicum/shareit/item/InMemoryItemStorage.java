@@ -86,6 +86,6 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     private void deleteItem(int userId, ItemDto itemDto) {
-        items.get(userId).remove(ItemMapper.toItem(itemDto));
+        items.get(userId).remove(ItemMapper.toItem(itemDto,userId));
     }
 }
