@@ -2,9 +2,7 @@ package ru.practicum.shareit.user.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.stereotype.Component;
+
 
 import javax.persistence.*;
 
