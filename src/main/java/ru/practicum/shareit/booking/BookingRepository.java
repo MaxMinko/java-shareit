@@ -45,7 +45,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, Book
     @Query(value = "select *" +
             "from bookers " +
             "where booker_id=? AND " +
-            "CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3' between start_time and end_time"
+            "now() between start_time and end_time"
             , nativeQuery = true)
     List<Booking> findBookingWithCurrentStatus(int userId);
 
@@ -53,7 +53,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, Book
     @Query(value = "select * " +
             "from bookers " +
             "where booker_id=? AND " +
-            "  end_time<=CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3'   order by start_time DESC"
+            "  end_time<=now()    order by start_time DESC"
             , nativeQuery = true)
     List<Booking> findBookingInPast(int userId);
 
@@ -77,14 +77,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, Book
 
     @Query(value = "select * " +
             "FROM bookers " +
-            "where item_id=?1 and status  ILIKE 'APPROVED' AND start_time>CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3' " +
+            "where item_id=?1 and status  ILIKE 'APPROVED' AND start_time>now() " +
             "order by start_time LIMIT 1"
             , nativeQuery = true)
     Booking findNextBookingForItem(int itemId);
 
     @Query(value = "select * " +
             "FROM bookers " +
-            "where item_id=?1 and status  ILIKE 'APPROVED' AND start_time<=CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3' " +
+            "where item_id=?1 and status  ILIKE 'APPROVED' AND start_time<=now() " +
             "order  by start_time DESC LIMIT 1"
             , nativeQuery = true)
     Booking findLastBookingForItem(int itemId);
@@ -99,14 +99,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, Book
     @Query(value = "select * " +
             "FROM bookers inner join items i on i.id = bookers.item_id " +
             "where i.user_id=? AND " +
-            "CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3' BETWEEN start_time AND end_time"
+            "now() BETWEEN start_time AND end_time"
             , nativeQuery = true)
     List<Booking> findCurrentBookingByOwner(int userId);
 
     @Query(value = "select * " +
             "FROM bookers inner join items i on i.id = bookers.item_id " +
             "where i.user_id=? AND " +
-            "  end_time<=CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3'   order by start_time DESC"
+            "  end_time<=now()   order by start_time DESC"
             , nativeQuery = true)
     List<Booking> findBookingInPastByOwner(int userId);
 
@@ -120,7 +120,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, Book
     @Query(value = "select COUNT(id) " +
             "FROM bookers " +
             "where booker_id=?1 and item_id=?2 " +
-            "AND end_time<CURRENT_TIMESTAMP AT TIME ZONE 'UTC -3'"
+            "AND end_time<now()"
             , nativeQuery = true)
     Integer findBookingForComments(int userId, int itemId);
 }
