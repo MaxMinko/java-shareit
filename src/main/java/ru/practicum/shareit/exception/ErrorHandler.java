@@ -17,13 +17,15 @@ public class ErrorHandler {
     public ErrorResponse handleValidationException(final ValidationException e) {
         return new ErrorResponse(e.getMessage());
     }
-
+/*
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         log.info("Произошла непредвиденная ошибка.");
         return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
+
+ */
 
 
     @ExceptionHandler

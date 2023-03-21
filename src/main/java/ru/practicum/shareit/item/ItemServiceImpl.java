@@ -4,9 +4,8 @@ package ru.practicum.shareit.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingMapper;
-import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingService;
-import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.dto.BookingDtoForResponse;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -55,12 +54,12 @@ public class ItemServiceImpl implements ItemService {
         Item item = getItem(itemId);
         ItemDto itemDto = ItemMapper.toItemDto(item);
         if (item.getUserId() == userId) {
-            Booking nextBooking = bookingService.findNextBookingForItem(itemId);
-            Booking lastBooking = bookingService.findLastBookingForItem(itemId);
-            if (nextBooking != null) {
+            BookingDtoForResponse nextBooking = bookingService.findNextBookingForItem(itemId);
+            BookingDtoForResponse lastBooking = bookingService.findLastBookingForItem(itemId);
+            if (nextBooking.getId() != 0) {
                 itemDto.setNextBooking(BookingMapper.toBookingDtoWithIdAndBookerId(nextBooking));
             }
-            if (lastBooking != null) {
+            if (lastBooking.getId() != 0) {
                 itemDto.setLastBooking(BookingMapper.toBookingDtoWithIdAndBookerId(lastBooking));
             }
         }
@@ -74,12 +73,12 @@ public class ItemServiceImpl implements ItemService {
         List<ItemDto> itemDtoList = itemRepository.findItemsByUserIdOrderByIdAsc(userId).stream()
                 .map(ItemMapper::toItemDto).collect(Collectors.toList());
         for (ItemDto itemDto : itemDtoList) {
-            Booking nextBooking = bookingService.findNextBookingForItem(itemDto.getId());
-            Booking lastBooking = bookingService.findLastBookingForItem(itemDto.getId());
-            if (nextBooking != null && lastBooking != null) {
+            BookingDtoForResponse nextBooking = bookingService.findNextBookingForItem(itemDto.getId());
+            BookingDtoForResponse lastBooking = bookingService.findLastBookingForItem(itemDto.getId());
+            if (nextBooking.getId() != 0 && lastBooking.getId() != 0) {
                 itemDto.setNextBooking(BookingMapper.toBookingDtoWithIdAndBookerId(nextBooking));
             }
-            if (lastBooking != null) {
+            if (lastBooking.getId() != 0) {
                 itemDto.setLastBooking(BookingMapper.toBookingDtoWithIdAndBookerId(lastBooking));
             }
         }

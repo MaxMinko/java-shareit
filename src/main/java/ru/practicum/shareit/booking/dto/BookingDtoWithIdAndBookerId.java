@@ -13,4 +13,9 @@ import javax.persistence.*;
 public class BookingDtoWithIdAndBookerId {
     int id;
     int bookerId;
+
+   public BookingDtoWithIdAndBookerId(){
+
+   }
 }
+

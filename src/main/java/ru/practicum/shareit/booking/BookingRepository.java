@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.List;
 
-public interface BookingRepository extends JpaRepository<Booking, Integer>, BookingRepositoryCustom {
+public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query(value = "select * " +
             "FROM bookers inner join items i on i.id = bookers.item_id " +

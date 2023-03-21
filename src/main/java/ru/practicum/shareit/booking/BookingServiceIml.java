@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoForResponse;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.BookingNotFoundException;
 import ru.practicum.shareit.exception.ItemUnavailableException;
@@ -18,6 +19,7 @@ import ru.practicum.shareit.validator.BookingValidator;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceIml implements BookingService {
@@ -27,7 +29,8 @@ public class BookingServiceIml implements BookingService {
     private final UserService userService;
 
     @Autowired
-    public BookingServiceIml(BookingRepository bookingRepository, @Lazy ItemService itemService, UserService userService) {
+    public BookingServiceIml(BookingRepository bookingRepository, @Lazy ItemService itemService,
+                             UserService userService) {
         this.bookingRepository = bookingRepository;
         this.itemService = itemService;
         this.userService = userService;
@@ -36,7 +39,7 @@ public class BookingServiceIml implements BookingService {
 
 
     @Override
-    public Booking addBooking(BookingDto bookingDto, int userId) {
+    public BookingDtoForResponse addBooking(BookingDto bookingDto, int userId) {
         User user = UserMapper.toUser(userService.getUser(userId));
         Item item = itemService.getItem(bookingDto.getItemId());
         bookingValidator.checkBookingDto(bookingDto);
@@ -50,24 +53,24 @@ public class BookingServiceIml implements BookingService {
             booking.setItem(item);
             booking.setBooker(user);
             booking.setStatus(String.valueOf(BookingStatus.WAITING));
-            return bookingRepository.save(booking);
+            return BookingMapper.toBookingDtoForResponse(bookingRepository.save(booking));
         } else {
             throw new ItemUnavailableException("Вещь не доступна для бронирования.");
         }
     }
 
     @Override
-    public Booking getBooking(int userId, int bookingId) {
+    public BookingDtoForResponse getBooking(int userId, int bookingId) {
         Booking booking = bookingRepository.findBooking(bookingId, userId);
         if (booking == null) {
             throw new BookingNotFoundException("Бронирование не найдено.");
         }
-        return booking;
+        return BookingMapper.toBookingDtoForResponse(booking);
 
     }
 
     @Override
-    public Booking approvedBooking(Boolean status, int userId, int bookingId) {
+    public BookingDtoForResponse approvedBooking(Boolean status, int userId, int bookingId) {
         Booking booking = bookingRepository.findBookingForApprove(bookingId, userId);
         if (booking == null) {
             throw new BookingNotFoundException("Бронирование не найдено");
@@ -77,63 +80,75 @@ public class BookingServiceIml implements BookingService {
         }
         if (status == true) {
             booking.setStatus(String.valueOf(BookingStatus.APPROVED));
-            return bookingRepository.save(booking);
+            return BookingMapper.toBookingDtoForResponse(bookingRepository.save(booking));
         } else {
             booking.setStatus(String.valueOf(BookingStatus.REJECTED));
-            return bookingRepository.save(booking);
+            return BookingMapper.toBookingDtoForResponse(bookingRepository.save(booking));
         }
     }
 
     @Override
-    public List<Booking> getBookingWithState(int userId, String state) {
+    public List<BookingDtoForResponse> getBookingWithState(int userId, String state) {
         userService.getUser(userId);
         switch (state) {
             case ("ALL"):
-                return bookingRepository.findByBookerIdOrderByStartDesc(userId);
+                return bookingRepository.findByBookerIdOrderByStartDesc(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("CURRENT"):
-                return bookingRepository.findBookingWithCurrentStatus(userId);
+                return bookingRepository.findBookingWithCurrentStatus(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("FUTURE"):
-                return bookingRepository.findBookingFuture(userId);
+                return bookingRepository.findBookingFuture(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("WAITING"):
-                return bookingRepository.findBookingWithWaitingStatus(userId);
+                return bookingRepository.findBookingWithWaitingStatus(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("REJECTED"):
-                return bookingRepository.findBookingWithRejectedStatus(userId);
+                return bookingRepository.findBookingWithRejectedStatus(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("PAST"):
-                return bookingRepository.findBookingInPast(userId);
+                return bookingRepository.findBookingInPast(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
-    public List<Booking> getBookingOwner(int userId, String state) {
+    public List<BookingDtoForResponse> getBookingOwner(int userId, String state) {
         userService.getUser(userId);
         switch (state) {
             case ("ALL"):
-                return bookingRepository.findByItem_userIdOrderByStartDesc(userId);
+                return bookingRepository.findByItem_userIdOrderByStartDesc(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("CURRENT"):
-                return bookingRepository.findCurrentBookingByOwner(userId);
+                return bookingRepository.findCurrentBookingByOwner(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("FUTURE"):
-                return bookingRepository.findBookingFutureByOwner(userId);
+                return bookingRepository.findBookingFutureByOwner(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("WAITING"):
-                return bookingRepository.findWaitingBookingByOwner(userId);
+                return bookingRepository.findWaitingBookingByOwner(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("REJECTED"):
-                return bookingRepository.findRejectedBookingByOwner(userId);
+                return bookingRepository.findRejectedBookingByOwner(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("PAST"):
-                return bookingRepository.findBookingInPastByOwner(userId);
+                return bookingRepository.findBookingInPastByOwner(userId).stream()
+                        .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
-    public Booking findNextBookingForItem(int itemId) {
-        return bookingRepository.findNextBookingForItem(itemId);
+    public BookingDtoForResponse findNextBookingForItem(int itemId) {
+        return BookingMapper.toBookingDtoForResponse(bookingRepository.findNextBookingForItem(itemId));
     }
 
     @Override
-    public Booking findLastBookingForItem(int itemId) {
-        return bookingRepository.findLastBookingForItem(itemId);
+    public BookingDtoForResponse findLastBookingForItem(int itemId) {
+        return BookingMapper.toBookingDtoForResponse(bookingRepository.findLastBookingForItem(itemId));
     }
 
     @Override
