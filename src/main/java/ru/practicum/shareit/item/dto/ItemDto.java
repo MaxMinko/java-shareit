@@ -1,17 +1,39 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.booking.dto.BookingDtoWithIdAndBookerId;
+
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class ItemDto {
-     int id;
-     String name;
-     String description;
-     Boolean available;
+    int id;
+    @NotEmpty()
+    String name;
+    @NotEmpty()
+    String description;
+    @NotNull()
+    Boolean available;
+
+    BookingDtoWithIdAndBookerId lastBooking;
+
+    BookingDtoWithIdAndBookerId nextBooking;
+
+    List<CommentDto> comments;
+
+
+    public ItemDto(int id, String name, String description, Boolean available) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
+
 }
 
