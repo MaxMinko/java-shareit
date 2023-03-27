@@ -3,9 +3,9 @@ package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.UserNotFoundException;
-import ru.practicum.shareit.validator.UserValidator;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.validator.UserValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserValidator userValidator;
+
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {

@@ -75,11 +75,13 @@ public class ItemServiceImpl implements ItemService {
         for (ItemDto itemDto : itemDtoList) {
             BookingDtoForResponse nextBooking = bookingService.findNextBookingForItem(itemDto.getId());
             BookingDtoForResponse lastBooking = bookingService.findLastBookingForItem(itemDto.getId());
-            if (nextBooking.getId() != 0 && lastBooking.getId() != 0) {
-                itemDto.setNextBooking(BookingMapper.toBookingDtoWithIdAndBookerId(nextBooking));
-            }
-            if (lastBooking.getId() != 0) {
-                itemDto.setLastBooking(BookingMapper.toBookingDtoWithIdAndBookerId(lastBooking));
+            if (nextBooking != null && lastBooking != null) {
+                if (nextBooking.getId() != 0 && lastBooking.getId() != 0) {
+                    itemDto.setNextBooking(BookingMapper.toBookingDtoWithIdAndBookerId(nextBooking));
+                }
+                if (lastBooking.getId() != 0) {
+                    itemDto.setLastBooking(BookingMapper.toBookingDtoWithIdAndBookerId(lastBooking));
+                }
             }
         }
         return itemDtoList;
@@ -105,9 +107,16 @@ public class ItemServiceImpl implements ItemService {
         User user = UserMapper.toUser(userService.getUser(userId));
         Integer quantityOfItemReservations = bookingService.findBookingForComments(userId, itemId);
         if (quantityOfItemReservations < 1) {
-            throw new ValidationException("Пользователь не может оставить отззыв на эту вещь.");
+            throw new ValidationException("Пользователь не может оставить отзыв на эту вещь.");
         }
-        commentDto.setCreated(LocalDateTime.now());
+        if(commentDto.getCreated()==null) {
+            commentDto.setCreated(LocalDateTime.now());
+        }
         return CommentMapper.toCommentDto(commentRepository.save(CommentMapper.toComment(commentDto, user, item)));
+    }
+
+    @Override
+    public List<Item> getItemWithRequest(int requestId) {
+        return itemRepository.getItemWithRequest(requestId);
     }
 }

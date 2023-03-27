@@ -26,6 +26,8 @@ public class ErrorHandler {
     }
 
 
+
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleBookingNotFoundException(final BookingNotFoundException e) {

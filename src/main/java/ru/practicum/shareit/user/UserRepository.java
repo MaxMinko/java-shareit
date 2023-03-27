@@ -7,4 +7,5 @@ import ru.practicum.shareit.user.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
     User updateUser(UserDto userDto, int userId);
+
 }

@@ -17,7 +17,6 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.validator.BookingValidator;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,26 +87,29 @@ public class BookingServiceIml implements BookingService {
     }
 
     @Override
-    public List<BookingDtoForResponse> getBookingWithState(int userId, String state) {
+    public List<BookingDtoForResponse> getBookingWithState(int userId, String state, int from, int size) {
         userService.getUser(userId);
+        if (from == 0 && size == 0) {
+            throw new ValidationException("");
+        }
         switch (state) {
             case ("ALL"):
-                return bookingRepository.findByBookerIdOrderByStartDesc(userId).stream()
+                return bookingRepository.findByBookerIdOrderByStartDesc(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("CURRENT"):
-                return bookingRepository.findBookingWithCurrentStatus(userId).stream()
+                return bookingRepository.findBookingWithCurrentStatus(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("FUTURE"):
-                return bookingRepository.findBookingFuture(userId).stream()
+                return bookingRepository.findBookingFuture(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("WAITING"):
-                return bookingRepository.findBookingWithWaitingStatus(userId).stream()
+                return bookingRepository.findBookingWithWaitingStatus(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("REJECTED"):
-                return bookingRepository.findBookingWithRejectedStatus(userId).stream()
+                return bookingRepository.findBookingWithRejectedStatus(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("PAST"):
-                return bookingRepository.findBookingInPast(userId).stream()
+                return bookingRepository.findBookingInPast(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
@@ -115,26 +117,29 @@ public class BookingServiceIml implements BookingService {
     }
 
     @Override
-    public List<BookingDtoForResponse> getBookingOwner(int userId, String state) {
+    public List<BookingDtoForResponse> getBookingOwner(int userId, String state, int from, int size) {
         userService.getUser(userId);
+        if (from == 0 && size == 0) {
+            throw new ValidationException("");
+        }
         switch (state) {
             case ("ALL"):
-                return bookingRepository.findByItem_userIdOrderByStartDesc(userId).stream()
+                return bookingRepository.findByItem_userIdOrderByStartDesc(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("CURRENT"):
-                return bookingRepository.findCurrentBookingByOwner(userId).stream()
+                return bookingRepository.findCurrentBookingByOwner(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("FUTURE"):
-                return bookingRepository.findBookingFutureByOwner(userId).stream()
+                return bookingRepository.findBookingFutureByOwner(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("WAITING"):
-                return bookingRepository.findWaitingBookingByOwner(userId).stream()
+                return bookingRepository.findWaitingBookingByOwner(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("REJECTED"):
-                return bookingRepository.findRejectedBookingByOwner(userId).stream()
+                return bookingRepository.findRejectedBookingByOwner(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             case ("PAST"):
-                return bookingRepository.findBookingInPastByOwner(userId).stream()
+                return bookingRepository.findBookingInPastByOwner(userId, from, size).stream()
                         .map(BookingMapper::toBookingDtoForResponse).collect(Collectors.toList());
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
