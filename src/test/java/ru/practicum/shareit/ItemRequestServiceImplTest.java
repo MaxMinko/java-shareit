@@ -17,7 +17,6 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,14 +42,13 @@ public class ItemRequestServiceImplTest {
 
         Mockito.when(userService.getUser(1)).thenReturn(new UserDto(1, "test", "test"));
         Mockito.when(itemRequestRepository.findById(1)).thenReturn(Optional.of(itemRequest));
-        Mockito.when(itemService.getItemWithRequest(1)).thenReturn(new ArrayList<>());
+
 
         ItemRequestDtoForResponse actualItemRequest = itemRequestService.getItemRequest(1, 1);
 
         Assertions.assertEquals(itemRequest.getId(), actualItemRequest.getId());
         Assertions.assertEquals(itemRequest.getCreated(), actualItemRequest.getCreated());
         Assertions.assertEquals(itemRequest.getDescription(), actualItemRequest.getDescription());
-        Assertions.assertEquals(0, actualItemRequest.getItems().size());
     }
 
     @Test

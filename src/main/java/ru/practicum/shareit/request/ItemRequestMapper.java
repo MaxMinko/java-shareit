@@ -23,6 +23,12 @@ public class ItemRequestMapper {
     }
 
     public static ItemRequestDtoForResponse toItemRequestDtoForResponse(ItemRequest itemRequest) {
-        return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription(), itemRequest.getCreated(),itemRequest.getItems().stream().map(ItemMapper::toItemDtoForRequest).collect(Collectors.toList()));
+        if(itemRequest.getItems()==null){
+            return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription()
+                    , itemRequest.getCreated());
+        }
+        return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription()
+                , itemRequest.getCreated(),itemRequest.getItems().stream()
+                .map(ItemMapper::toItemDtoForRequest).collect(Collectors.toList()));
     }
 }
