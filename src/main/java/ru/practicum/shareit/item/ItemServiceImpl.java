@@ -15,6 +15,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,13 +38,13 @@ public class ItemServiceImpl implements ItemService {
         this.commentRepository = commentRepository;
         this.bookingService = bookingService;
     }
-
+    @Transactional
     @Override
     public ItemDto addItem(ItemDto itemDto, int userId) {
         Item item = ItemMapper.toItem(itemDto, userId);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
-
+    @Transactional
     @Override
     public ItemDto updateItem(ItemDto itemDto, int userId, int itemId) {
         return ItemMapper.toItemDto(itemRepository.updateItem(itemDto, userId, itemId));
@@ -100,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
     public Item getItem(int itemId) {
         return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("Вещь не найдена."));
     }
-
+    @Transactional
     @Override
     public CommentDto addCommentDto(CommentDto commentDto, int userId, int itemId) {
         Item item = getItem(itemId);

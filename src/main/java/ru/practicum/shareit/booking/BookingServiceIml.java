@@ -17,6 +17,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.validator.BookingValidator;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class BookingServiceIml implements BookingService {
         bookingValidator = new BookingValidator();
     }
 
-
+    @Transactional
     @Override
     public BookingDtoForResponse addBooking(BookingDto bookingDto, int userId) {
         User user = UserMapper.toUser(userService.getUser(userId));
@@ -67,7 +68,7 @@ public class BookingServiceIml implements BookingService {
         return BookingMapper.toBookingDtoForResponse(booking);
 
     }
-
+    @Transactional
     @Override
     public BookingDtoForResponse approvedBooking(Boolean status, int userId, int bookingId) {
         Booking booking = bookingRepository.findBookingForApprove(bookingId, userId);

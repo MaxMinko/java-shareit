@@ -23,7 +23,7 @@ public class Item {
     Boolean available;
     @Column(name ="user_id",nullable = false)
      int userId;
-    @Column(name ="request_id")
+    @Column(name ="request_id",nullable = true)
     int requestId;
 
 

@@ -24,15 +24,14 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingDtoForResponse approvedBooking(@RequestHeader("X-Sharer-User-Id") int userId,
-                                                 @RequestParam(value = "approved", required = true) Boolean status,
+                                                 @RequestParam(value = "approved") Boolean status,
                                                  @PathVariable int bookingId) {
         return bookingService.approvedBooking(status, userId, bookingId);
     }
 
     @GetMapping()
     public List<BookingDtoForResponse> getBooking(@RequestHeader("X-Sharer-User-Id") int userId,
-                                                  @RequestParam(value = "state", required = false,
-                                                          defaultValue = "ALL") String state,
+                                                @RequestParam(value = "state", defaultValue = "ALL") String state,
                                                 @RequestParam(value = "from",defaultValue = "0") @Min(0) int from,
                                                 @RequestParam(value = "size",defaultValue = "100") @Min(1) @Max(100)
                                                       int size) {
@@ -47,11 +46,11 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingDtoForResponse> getBookingOwner(@RequestHeader("X-Sharer-User-Id") int userId,
-                                                       @RequestParam(value = "state", required = false
-                                                               , defaultValue = "ALL") String state,
+                                                       @RequestParam(value = "state", defaultValue = "ALL")
+                                                       String state,
                                                       @RequestParam(value = "from",defaultValue = "0") @Min(0) int from,
                                                       @RequestParam(value = "size",defaultValue = "100")
-                                                           @Min(1) @Max(100) int size) {
+                                                      @Min(1) @Max(100) int size) {
         return bookingService.getBookingOwner(userId, state, from, size);
     }
 

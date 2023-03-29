@@ -7,30 +7,27 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.UserNotFoundException;
-import ru.practicum.shareit.item.ItemMapper;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoForResponse;
 import ru.practicum.shareit.user.UserService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ItemRequestServiceImpl implements ItemRequestService {
-    ItemService itemService;
-    ItemRequestRepository itemRequestRepository;
-    UserService userService;
+    private ItemRequestRepository itemRequestRepository;
+    private UserService userService;
 
 
     @Autowired
-    public ItemRequestServiceImpl(ItemRequestRepository itemRequestRepository, @Lazy UserService userService,
-                                  @Lazy ItemService itemService) {
+    public ItemRequestServiceImpl(ItemRequestRepository itemRequestRepository, @Lazy UserService userService) {
         this.itemRequestRepository = itemRequestRepository;
         this.userService = userService;
-        this.itemService = itemService;
     }
 
+    @Transactional
     @Override
     public ItemRequestDto addRequest(ItemRequestDto itemRequestDto, int userId) {
         userService.getUser(userId);
@@ -41,15 +38,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDtoForResponse> getAllUserItemRequest(int userId) {
         userService.getUser(userId);
-        List<ItemRequestDtoForResponse> itemRequests = itemRequestRepository.findByUserId(userId)
-                .stream().map(ItemRequestMapper::toItemRequestDtoForResponse)
+        return itemRequestRepository.findByUserId(userId).stream()
+                .map(ItemRequestMapper::toItemRequestDtoForResponse)
                 .collect(Collectors.toList());
-        for (ItemRequestDtoForResponse itemRequestDtoForResponse : itemRequests) {
-            itemRequestDtoForResponse.setItems(itemService.getItemWithRequest(
-                            itemRequestDtoForResponse.getId()).stream()
-                    .map(ItemMapper::toItemDtoForRequest).collect(Collectors.toList()));
-        }
-        return itemRequests;
     }
 
     @Override
@@ -59,9 +50,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 .findById(requestId).orElseThrow(() -> new UserNotFoundException("Запрос не был найден."));
         ItemRequestDtoForResponse itemRequestDtoForResponse = ItemRequestMapper
                 .toItemRequestDtoForResponse(itemRequest);
-        itemRequestDtoForResponse.setItems(itemService.getItemWithRequest(
-                        itemRequestDtoForResponse.getId()).stream()
-                .map(ItemMapper::toItemDtoForRequest).collect(Collectors.toList()));
         return itemRequestDtoForResponse;
     }
 
@@ -71,11 +59,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 , Sort.by("created")));
         List<ItemRequestDtoForResponse> itemRequestDtoForResponseList = page.toList().stream()
                 .map(ItemRequestMapper::toItemRequestDtoForResponse).collect(Collectors.toList());
-        for (ItemRequestDtoForResponse itemRequestDtoForResponse : itemRequestDtoForResponseList) {
-            itemRequestDtoForResponse.setItems(itemService.getItemWithRequest(
-                            itemRequestDtoForResponse.getId()).stream()
-                    .map(ItemMapper::toItemDtoForRequest).collect(Collectors.toList()));
-        }
         return itemRequestDtoForResponseList;
     }
 }
