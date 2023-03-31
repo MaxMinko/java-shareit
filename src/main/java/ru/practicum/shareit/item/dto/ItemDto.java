@@ -21,7 +21,6 @@ public class ItemDto {
     String description;
     @NotNull()
     Boolean available;
-
     Integer requestId;
 
     BookingDtoWithIdAndBookerId lastBooking;

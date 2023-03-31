@@ -23,9 +23,8 @@ public class Item {
     Boolean available;
     @Column(name ="user_id",nullable = false)
      int userId;
-    @Column(name ="request_id",nullable = true)
-    int requestId;
-
+    @Column(name ="request_id")
+    Integer requestId;
 
     public Item(int id, String name, String description, boolean available,int userId) {
         this.id = id;
@@ -34,7 +33,7 @@ public class Item {
         this.available = available;
         this.userId =userId;
     }
-    public Item(int id, String name, String description, boolean available,int userId,int requestId) {
+    public Item(int id, String name, String description, boolean available,int userId,Integer requestId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -42,8 +41,6 @@ public class Item {
         this.userId =userId;
         this.requestId=requestId;
     }
-
-
 
     public Item() {
 

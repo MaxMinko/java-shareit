@@ -7,7 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,9 +22,10 @@ public class ItemRequest {
     LocalDateTime created;
     @Column(name = "user_id")
     int userId;
-    @OneToMany()
+
+    @OneToMany
     @JoinColumn(name="request_id")
-    private Set<Item> items;
+    private List<Item> items;
     public ItemRequest() {
     }
 }
