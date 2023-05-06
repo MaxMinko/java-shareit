@@ -1,9 +1,10 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.booking.dto.BookingDtoWithIdAndBookerId;
-
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ public class ItemDto {
     String description;
     @NotNull()
     Boolean available;
+    Integer requestId;
 
     BookingDtoWithIdAndBookerId lastBooking;
 
@@ -28,11 +30,12 @@ public class ItemDto {
     List<CommentDto> comments;
 
 
-    public ItemDto(int id, String name, String description, Boolean available) {
+    public ItemDto(int id, String name, String description, Boolean available, Integer requestId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
+        this.requestId = requestId;
     }
 
 }

@@ -31,5 +31,13 @@ public class CommentDto {
         this.created = created;
     }
 
+    public CommentDto(int id, String text, String authorName,
+                      int itemId) {
+        this.id = id;
+        this.text = text;
+        this.authorName = authorName;
+        this.itemId = itemId;
+    }
+
 }
 

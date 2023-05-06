@@ -15,6 +15,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
+        log.info(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -24,6 +25,9 @@ public class ErrorHandler {
         log.info("Произошла непредвиденная ошибка.");
         return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
+
+
+
 
 
     @ExceptionHandler

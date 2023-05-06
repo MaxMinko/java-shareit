@@ -45,7 +45,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> getItemByDescription(@RequestParam(value = "text", required = true) String text) {
+    public List<ItemDto> getItemByDescription(@RequestParam(value = "text") String text) {
         return itemService.getItemByDescription(text);
     }
 
