@@ -4,10 +4,10 @@ import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.web.dto.UserDto;
 
 public class UserValidator {
-    
-   public UserValidator(){
 
-   }
+    public UserValidator() {
+
+    }
 
     public void checkUserDtoForCreate(UserDto userDto) {
         if (userDto.getEmail() == null || userDto.getEmail().isBlank()) {
@@ -49,8 +49,4 @@ public class UserValidator {
             checkUserDtoEmail(userDto.getEmail(), userId);
         }
     }
-
-
-
-
 }

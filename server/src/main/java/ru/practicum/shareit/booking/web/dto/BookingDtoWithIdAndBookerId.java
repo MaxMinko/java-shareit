@@ -14,8 +14,8 @@ public class BookingDtoWithIdAndBookerId {
     int id;
     int bookerId;
 
-   public BookingDtoWithIdAndBookerId(){
+    public BookingDtoWithIdAndBookerId() {
 
-   }
+    }
 }
 

@@ -24,12 +24,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         userValidator = new UserValidator();
     }
+
     @Transactional
     @Override
     public UserDto addUser(UserDto userDto) {
         userValidator.checkUserDtoForCreate(userDto);
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(userDto)));
     }
+
     @Transactional
     @Override
     public UserDto updateUser(UserDto userDto, int userId) {
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не был найден."));
         return UserMapper.toUserDto(user);
     }
+
     @Transactional
     @Override
     public void userDelete(int userId) {

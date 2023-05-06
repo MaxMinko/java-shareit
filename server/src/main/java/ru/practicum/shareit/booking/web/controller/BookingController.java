@@ -6,8 +6,7 @@ import ru.practicum.shareit.booking.web.dto.BookingDto;
 import ru.practicum.shareit.booking.web.dto.BookingDtoForResponse;
 import ru.practicum.shareit.booking.service.BookingService;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+
 import java.util.List;
 
 
@@ -33,9 +32,9 @@ public class BookingController {
     @GetMapping()
     public List<BookingDtoForResponse> getBooking(@RequestHeader("X-Sharer-User-Id") int userId,
                                                   @RequestParam(value = "state") String state,
-                                                  @RequestParam(value = "from")  int from,
+                                                  @RequestParam(value = "from") int from,
                                                   @RequestParam(value = "size")
-                                                 int size) {
+                                                  int size) {
         return bookingService.getBookingWithState(userId, state, from, size);
     }
 
@@ -51,7 +50,7 @@ public class BookingController {
                                                        String state,
                                                        @RequestParam(value = "from") int from,
                                                        @RequestParam(value = "size")
-                                                      int size) {
+                                                       int size) {
         return bookingService.getBookingOwner(userId, state, from, size);
     }
 

@@ -16,7 +16,6 @@ public class ItemRequestDto {
     String description;
     LocalDateTime created;
 
-
     public ItemRequestDto(String description) {
         this.description = description;
     }

@@ -24,12 +24,12 @@ public class ItemRequestMapper {
     }
 
     public static ItemRequestDtoForResponse toItemRequestDtoForResponse(ItemRequest itemRequest) {
-        if(itemRequest.getItems()==null){
-            return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription()
-                    , itemRequest.getCreated());
+        if (itemRequest.getItems() == null) {
+            return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription(),
+                    itemRequest.getCreated());
         }
-        return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription()
-                , itemRequest.getCreated(),itemRequest.getItems().stream()
+        return new ItemRequestDtoForResponse(itemRequest.getId(), itemRequest.getDescription(),
+                itemRequest.getCreated(), itemRequest.getItems().stream()
                 .map(ItemMapper::toItemDtoForRequest).collect(Collectors.toList()));
     }
 }

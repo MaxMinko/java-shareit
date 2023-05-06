@@ -24,8 +24,9 @@ public class ItemRequest {
     int userId;
 
     @OneToMany
-    @JoinColumn(name="request_id")
+    @JoinColumn(name = "request_id")
     private List<Item> items;
+
     public ItemRequest() {
     }
 }

@@ -20,5 +20,6 @@ public interface ItemService {
     Item getItem(int itemId);
 
     CommentDto addCommentDto(CommentDto commentDto, int userId, int itemId);
+
     List<Item> getItemWithRequest(int requestId);
 }

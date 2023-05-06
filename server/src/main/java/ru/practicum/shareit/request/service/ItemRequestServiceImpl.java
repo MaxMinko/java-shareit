@@ -23,7 +23,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private ItemRequestRepository itemRequestRepository;
     private UserService userService;
 
-
     @Autowired
     public ItemRequestServiceImpl(ItemRequestRepository itemRequestRepository, @Lazy UserService userService) {
         this.itemRequestRepository = itemRequestRepository;
@@ -58,8 +57,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDtoForResponse> getListWithOtherUserRequest(int userId, int from, int size) {
-        Page<ItemRequest> page = itemRequestRepository.findByUserIdIsNot(userId, PageRequest.of(from, size
-                , Sort.by("created")));
+        Page<ItemRequest> page = itemRequestRepository.findByUserIdIsNot(userId, PageRequest.of(from, size,
+                Sort.by("created")));
         List<ItemRequestDtoForResponse> itemRequestDtoForResponseList = page.toList().stream()
                 .map(ItemRequestMapper::toItemRequestDtoForResponse).collect(Collectors.toList());
         return itemRequestDtoForResponseList;

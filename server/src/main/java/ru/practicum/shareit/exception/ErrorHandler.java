@@ -20,7 +20,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
@@ -28,18 +27,12 @@ public class ErrorHandler {
         return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
 
-
-
-
-
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleBookingNotFoundException(final BookingNotFoundException e) {
         log.info("Бронирование не найдено.");
         return new ErrorResponse(e.getMessage());
     }
-
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -73,5 +66,4 @@ public class ErrorHandler {
     public ErrorResponse handleItemUnavailableException(final ItemUnavailableException e) {
         return new ErrorResponse(e.getMessage());
     }
-
 }

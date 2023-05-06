@@ -14,28 +14,26 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping(  value = "/items", consumes = MediaType.ALL_VALUE,
+@RequestMapping(value = "/items", consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ItemController {
-private final ItemClient itemClient;
-private final UserClient userClient;
-
-
+    private final ItemClient itemClient;
+    private final UserClient userClient;
 
     @PostMapping()
     public ResponseEntity<Object> addItem(@RequestHeader("X-Sharer-User-Id") int userId,
                                           @Valid @RequestBody ItemDto itemDto) {
         userClient.getUser(userId);
-        return itemClient.addItem(userId,itemDto);
+        return itemClient.addItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(@RequestHeader("X-Sharer-User-Id") int userId,
-                              @PathVariable("itemId") int itemId,
-                              @RequestBody ItemDto itemDto) {
+                                             @PathVariable("itemId") int itemId,
+                                             @RequestBody ItemDto itemDto) {
         userClient.getUser(userId);
-        return itemClient.updateItem(userId,itemId,itemDto);
+        return itemClient.updateItem(userId, itemId, itemDto);
     }
 
     @GetMapping()
@@ -45,8 +43,8 @@ private final UserClient userClient;
 
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> getItem(@RequestHeader("X-Sharer-User-Id") int userId,
-                           @PathVariable("itemId") int itemId) {
-        return itemClient.getItem(userId,itemId);
+                                          @PathVariable("itemId") int itemId) {
+        return itemClient.getItem(userId, itemId);
     }
 
     @GetMapping("/search")
@@ -56,8 +54,8 @@ private final UserClient userClient;
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComment(@RequestHeader("X-Sharer-User-Id") int userId,
-                                 @PathVariable("itemId") int itemId,
-                                 @Valid @RequestBody CommentDto commentDto) {
-        return itemClient.addComment(userId,itemId,commentDto);
+                                             @PathVariable("itemId") int itemId,
+                                             @Valid @RequestBody CommentDto commentDto) {
+        return itemClient.addComment(userId, itemId, commentDto);
     }
 }

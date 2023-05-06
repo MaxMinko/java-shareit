@@ -42,12 +42,14 @@ public class ItemServiceImpl implements ItemService {
         this.commentRepository = commentRepository;
         this.bookingService = bookingService;
     }
+
     @Transactional
     @Override
     public ItemDto addItem(ItemDto itemDto, int userId) {
         Item item = ItemMapper.toItem(itemDto, userId);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
+
     @Transactional
     @Override
     public ItemDto updateItem(ItemDto itemDto, int userId, int itemId) {
@@ -105,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
     public Item getItem(int itemId) {
         return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("Вещь не найдена."));
     }
+
     @Transactional
     @Override
     public CommentDto addCommentDto(CommentDto commentDto, int userId, int itemId) {
@@ -114,7 +117,7 @@ public class ItemServiceImpl implements ItemService {
         if (quantityOfItemReservations < 1) {
             throw new ValidationException("Пользователь не может оставить отзыв на эту вещь.");
         }
-        if(commentDto.getCreated()==null) {
+        if (commentDto.getCreated() == null) {
             commentDto.setCreated(LocalDateTime.now());
         }
         return CommentMapper.toCommentDto(commentRepository.save(CommentMapper.toComment(commentDto, user, item)));

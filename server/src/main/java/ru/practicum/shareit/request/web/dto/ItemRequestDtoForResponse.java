@@ -21,10 +21,11 @@ public class ItemRequestDtoForResponse {
         this.description = description;
         this.created = created;
     }
-    public ItemRequestDtoForResponse(int id, String description, LocalDateTime created,List<ItemDtoForRequest>items) {
+
+    public ItemRequestDtoForResponse(int id, String description, LocalDateTime created, List<ItemDtoForRequest> items) {
         this.id = id;
         this.description = description;
         this.created = created;
-        this.items=items;
+        this.items = items;
     }
 }

@@ -9,12 +9,11 @@ import ru.practicum.shareit.user.web.dto.UserDto;
 
 
 @RestController
-@RequestMapping(  value = "/users", consumes = MediaType.ALL_VALUE,
+@RequestMapping(value = "/users", consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class UserController {
     private final UserClient userClient;
-
 
     @PostMapping()
     public ResponseEntity<Object> addUser(@RequestBody UserDto userDto) {

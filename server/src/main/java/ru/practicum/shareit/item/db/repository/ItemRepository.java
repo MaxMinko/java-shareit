@@ -6,7 +6,6 @@ import ru.practicum.shareit.item.db.model.Item;
 
 import java.util.List;
 
-
 public interface ItemRepository extends JpaRepository<Item, Integer>, ItemRepositoryCustom {
     List<Item> findItemsByUserIdOrderByIdAsc(int id);
 
@@ -14,13 +13,11 @@ public interface ItemRepository extends JpaRepository<Item, Integer>, ItemReposi
 
     @Query(value = "select * " +
             "from items   " +
-            "where (name ILIKE %?1% or description ILIKE %?1%) AND available  is  true"
-            , nativeQuery = true)
+            "where (name ILIKE %?1% or description ILIKE %?1%) AND available  is  true", nativeQuery = true)
     List<Item> findByNameAndDescriptionContaining(String text);
 
     @Query(value = "select * " +
             "from items   " +
-            "where request_id=? "
-            , nativeQuery = true)
+            "where request_id=? ", nativeQuery = true)
     List<Item> getItemWithRequest(int requestId);
 }

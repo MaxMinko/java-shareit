@@ -13,56 +13,52 @@ import ru.practicum.shareit.item.web.dto.CommentDto;
 import ru.practicum.shareit.item.web.dto.ItemDto;
 
 import java.util.Map;
+
 @Service
 public class ItemClient extends BaseClient {
-
     private static final String API_PREFIX = "/items";
-
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-
     public ItemClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(  builder
+        super(builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build());
     }
 
-
-
-    public ResponseEntity<Object> addItem(int userId,ItemDto itemDto){
+    public ResponseEntity<Object> addItem(int userId, ItemDto itemDto) {
         logger.info("save user dto {}", itemDto);
-        return post("",userId,itemDto);
+        return post("", userId, itemDto);
     }
 
-    public ResponseEntity<Object> updateItem( int userId,
-                               int itemId,
-                              ItemDto itemDto) {
+    public ResponseEntity<Object> updateItem(int userId,
+                                             int itemId,
+                                             ItemDto itemDto) {
         logger.info("update item by id = {}", itemId);
-        return patch("/"+itemId, userId, itemDto);
+        return patch("/" + itemId, userId, itemDto);
     }
 
     public ResponseEntity<Object> getAllUserItems(int userId) {
         logger.info("get all user items");
-        return get("",userId);
+        return get("", userId);
     }
 
-    public ResponseEntity<Object> getItem( int userId, int itemId) {
+    public ResponseEntity<Object> getItem(int userId, int itemId) {
         logger.info("get item by id = {}", itemId);
-        return get("/"+itemId,userId);
+        return get("/" + itemId, userId);
     }
 
     public ResponseEntity<Object> getItemByDescription(String text) {
         logger.info("get items by text = {}", text);
-        Map<String,Object> parameters = Map.of( "text", text);
-        return get("/search?text={text}",null,parameters);
+        Map<String, Object> parameters = Map.of("text", text);
+        return get("/search?text={text}", null, parameters);
     }
 
 
-    public ResponseEntity<Object> addComment( int userId,
-                                int itemId, CommentDto commentDto) {
+    public ResponseEntity<Object> addComment(int userId,
+                                             int itemId, CommentDto commentDto) {
         logger.info("save comment dto {}", commentDto);
-        return post("/"+itemId+"/comment",userId,commentDto);
+        return post("/" + itemId + "/comment", userId, commentDto);
     }
 
 

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="comments")
+@Table(name = "comments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     @Id
@@ -26,11 +26,11 @@ public class Comment {
     LocalDateTime created;
 
     public Comment(int id, String text, Item item, User user, LocalDateTime created) {
-        this.id=id;
-        this.text=text;
-        this.item=item;
-        this.author=user;
-        this.created=created;
+        this.id = id;
+        this.text = text;
+        this.item = item;
+        this.author = user;
+        this.created = created;
     }
 
     public Comment() {

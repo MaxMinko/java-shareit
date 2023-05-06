@@ -7,6 +7,7 @@ import ru.practicum.shareit.item.web.dto.ItemDto;
 import ru.practicum.shareit.user.web.dto.UserDto;
 
 import java.time.LocalDateTime;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDtoForResponse {
@@ -17,7 +18,7 @@ public class BookingDtoForResponse {
     ItemDto item;
     String status;
 
-    public BookingDtoForResponse(int id, LocalDateTime start, LocalDateTime end, UserDto booker, ItemDto item, String status){
+    public BookingDtoForResponse(int id, LocalDateTime start, LocalDateTime end, UserDto booker, ItemDto item, String status) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -25,7 +26,8 @@ public class BookingDtoForResponse {
         this.item = item;
         this.status = status;
     }
-    public BookingDtoForResponse(){
+
+    public BookingDtoForResponse() {
 
     }
 }

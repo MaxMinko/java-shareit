@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="items")
+@Table(name = "items")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
     @Id
@@ -21,25 +21,26 @@ public class Item {
     String description;
 
     Boolean available;
-    @Column(name ="user_id",nullable = false)
-     int userId;
-    @Column(name ="request_id")
+    @Column(name = "user_id", nullable = false)
+    int userId;
+    @Column(name = "request_id")
     Integer requestId;
 
-    public Item(int id, String name, String description, boolean available,int userId) {
+    public Item(int id, String name, String description, boolean available, int userId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
-        this.userId =userId;
+        this.userId = userId;
     }
-    public Item(int id, String name, String description, boolean available,int userId,Integer requestId) {
+
+    public Item(int id, String name, String description, boolean available, int userId, Integer requestId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
-        this.userId =userId;
-        this.requestId=requestId;
+        this.userId = userId;
+        this.requestId = requestId;
     }
 
     public Item() {

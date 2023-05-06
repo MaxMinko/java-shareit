@@ -33,7 +33,6 @@ public class Booking {
 
     }
 
-
     public Booking(int id, LocalDateTime start, LocalDateTime end, User booker, Item item) {
         this.id = id;
         this.start = start;
@@ -47,6 +46,5 @@ public class Booking {
         this.booker = booker;
         this.item = item;
     }
-
 
 }

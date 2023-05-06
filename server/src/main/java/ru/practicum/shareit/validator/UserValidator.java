@@ -1,11 +1,9 @@
 package ru.practicum.shareit.validator;
 
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.user.db.repository.UserRepository;
 import ru.practicum.shareit.user.web.dto.UserDto;
 
 public class UserValidator {
-
 
     public UserValidator() {
     }

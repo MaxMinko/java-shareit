@@ -71,6 +71,7 @@ public class BookingServiceIml implements BookingService {
         return BookingMapper.toBookingDtoForResponse(booking);
 
     }
+
     @Transactional
     @Override
     public BookingDtoForResponse approvedBooking(Boolean status, int userId, int bookingId) {

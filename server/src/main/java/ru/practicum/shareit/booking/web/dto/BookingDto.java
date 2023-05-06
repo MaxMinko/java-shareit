@@ -26,9 +26,9 @@ public class BookingDto {
         this.status = status;
     }
 
-public BookingDto(){
+    public BookingDto() {
 
-}
+    }
 
 }
 

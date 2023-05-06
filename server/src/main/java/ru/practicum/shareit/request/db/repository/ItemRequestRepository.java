@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Integer> {
     List<ItemRequest> findByUserId(int userId);
+
     Page<ItemRequest> findByUserIdIsNot(int requestId, PageRequest pageRequest);
 }
