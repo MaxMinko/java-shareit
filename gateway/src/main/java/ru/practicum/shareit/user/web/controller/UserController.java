@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.web.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.client.UserClient;
 import ru.practicum.shareit.user.web.dto.UserDto;
@@ -12,6 +13,7 @@ import ru.practicum.shareit.user.web.dto.UserDto;
 @RequestMapping(value = "/users", consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Validated
 public class UserController {
     private final UserClient userClient;
 

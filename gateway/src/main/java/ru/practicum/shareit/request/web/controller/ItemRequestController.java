@@ -3,6 +3,7 @@ package ru.practicum.shareit.request.web.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.client.ItemRequestClient;
 import ru.practicum.shareit.request.web.dto.ItemRequestDto;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Min;
 @RequestMapping(value = "/requests", consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Validated
 public class ItemRequestController {
     private final ItemRequestClient itemRequestClient;
 
@@ -38,8 +40,10 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public ResponseEntity<Object> getListWithOtherUserRequest(@RequestHeader("X-Sharer-User-Id") int userId,
-                                                              @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                                              @RequestParam(value = "size", defaultValue = "1") @Min(1) @Max(100) Integer size) {
+                                                              @RequestParam(value = "from", defaultValue = "0")
+                                                              @Min(0) Integer from,
+                                                              @RequestParam(value = "size", defaultValue = "1")
+                                                              @Min(1) @Max(100) Integer size) {
         return itemRequestClient.getListWithOtherUserRequest(userId, from, size);
     }
 }

@@ -2,8 +2,10 @@ package ru.practicum.shareit.item.web.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.client.ItemClient;
 import ru.practicum.shareit.item.web.dto.CommentDto;
@@ -11,12 +13,15 @@ import ru.practicum.shareit.item.web.dto.ItemDto;
 import ru.practicum.shareit.user.client.UserClient;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
 @RequestMapping(value = "/items", consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
     private final ItemClient itemClient;
     private final UserClient userClient;
@@ -49,6 +54,10 @@ public class ItemController {
 
     @GetMapping("/search")
     public ResponseEntity<Object> getItemByDescription(@RequestParam(value = "text") String text) {
+        if (text.isBlank()) {
+            List<Object> list = new ArrayList<>();
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
         return itemClient.getItemByDescription(text);
     }
 
